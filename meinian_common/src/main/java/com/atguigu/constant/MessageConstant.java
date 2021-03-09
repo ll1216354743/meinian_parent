@@ -75,4 +75,5 @@ public class MessageConstant {
     int a;
     int b;
     int c;
+    int d;
 }
