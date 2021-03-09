@@ -73,5 +73,6 @@ public class MessageConstant {
     public static final String GET_ADDRESS_SUCCESS = "获取位置成功";
     public static final String GET_ADDRESS_FAIL = "获取位置失败";
     int a;
+    int b;
     int c;
 }
