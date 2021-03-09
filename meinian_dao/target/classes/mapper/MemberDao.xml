@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.dao.MemberDao">
+
+    <insert id="add" parameterType="com.atguigu.pojo.Member" useGeneratedKeys="true" keyProperty="id">
+        insert into t_member(fileNumber,name,sex,idCard,phoneNumber,regTime,password,email,birthday,remark)
+        values (#{fileNumber},#{name},#{sex},#{idCard},#{phoneNumber},#{regTime},#{password},#{email},#{birthday},#{remark})
+    </insert>
+
+
+    <select id="findTelephone" parameterType="string" resultType="com.atguigu.pojo.Member">
+        select * from t_member where phoneNumber = #{phoneNumber}
+    </select>
+
+    <select id="getMemberCountByMonth" parameterType="string" resultType="java.lang.Integer">
+        select count(*) from t_member where regTime &lt;= #{month}
+    </select>
+
+
+    <!--运营统计-->
+    <!--根据日期统计会员数，统计指定日期之前的会员数
+    注意：上午已经实现了这个方法
+    -->
+    <select id="findMemberCountBeforeDate" parameterType="string" resultType="int">
+        select count(id) from t_member where regTime &lt;= #{value}
+    </select>
+
+    <!--今日新增会员数-->
+    <select id="getTodayNewMember" parameterType="string" resultType="int">
+        SELECT COUNT(id) FROM t_member WHERE regTime = #{date}
+    </select>
+
+    <!--总会员数-->
+    <select id="getTotalMember" resultType="int">
+        SELECT COUNT(id) FROM t_member
+    </select>
+
+    <!--本周/本月新增会员数-->
+    <select id="getThisWeekAndMonthNewMember" parameterType="string" resultType="int">
+        SELECT COUNT(id) FROM t_member WHERE regTime &gt;= #{date}
+    </select>
+</mapper>

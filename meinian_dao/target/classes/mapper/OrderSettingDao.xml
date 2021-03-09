@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.dao.OrderSettingDao">
+
+
+    <insert id="add" parameterType="com.atguigu.pojo.OrderSetting">
+        insert into t_ordersetting(orderDate,number,reservations) values (#{orderDate},#{number},0)
+    </insert>
+
+    <select id="findOrderSettingByOrderDate" parameterType="date" resultType="java.lang.Integer">
+        select count(*) from t_ordersetting where orderDate = #{date}
+    </select>
+
+    <select id="getYearOrM" parameterType="string" resultType="com.atguigu.pojo.OrderSetting">
+        select * from t_ordersetting where LEFT(orderDate,7) = #{date}
+    </select>
+
+    <select id="findByOrderDate" parameterType="date" resultType="com.atguigu.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate = #{date}
+    </select>
+
+    <update id="update" parameterType="com.atguigu.pojo.OrderSetting">
+        update t_ordersetting set number = #{number} where orderDate = #{orderDate}
+    </update>
+
+    <update id="editOrderDateByDate" parameterType="date">
+        update t_ordersetting set
+        reservations = reservations + 1
+        where orderDate = #{date}
+    </update>
+
+
+</mapper>

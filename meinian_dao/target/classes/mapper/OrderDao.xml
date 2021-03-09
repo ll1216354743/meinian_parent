@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.dao.OrderDao">
+
+    <insert id="saveOrder" parameterType="com.atguigu.pojo.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into t_order(member_id,orderDate,orderType,orderStatus,setmeal_id)
+        values(#{memberId},#{orderDate},#{orderType},#{orderStatus},#{setmealId})
+    </insert>
+
+
+    <select id="findOrderByMap" parameterType="map" resultType="com.atguigu.pojo.Order">
+        select * from t_order
+        <where>
+            member_id = #{memberId} and orderDate = #{orderDate} and setmeal_id = #{setmealId}
+        </where>
+
+    </select>
+
+    <select id="findById" parameterType="int" resultType="map">
+        SELECT t_member. NAME    AS member,
+               t_setmeal. NAME   AS setmeal,
+               t_order.orderDate AS orderDate,
+               t_order.orderType AS orderType
+        FROM   t_order
+                   LEFT JOIN t_member
+                             ON t_member.id = member_id
+                   LEFT JOIN t_setmeal
+                             ON t_setmeal.id = setmeal_id
+        WHERE  t_order.id = #{id}
+    </select>
+
+
+    <!--运营统计-->
+    <!--今日预约数-->
+    <select id="getTodayOrderNumber" parameterType="string" resultType="int">
+        SELECT COUNT(id) FROM t_order WHERE orderDate = #{date}
+    </select>
+
+    <!--今日已出游数-->
+    <select id="getTodayVisitsNumber" parameterType="string" resultType="int">
+        SELECT COUNT(id) FROM t_order WHERE orderDate = #{date} AND orderStatus = '已出游'
+    </select>
+
+    <!--本周/本月，预约数-->
+    <select id="getThisWeekAndMonthOrderNumber" parameterType="map" resultType="int">
+        SELECT COUNT(id) FROM t_order WHERE orderDate BETWEEN #{begin} AND #{end}
+    </select>
+    <!--本周/本月，已出游数-->
+    <select id="getThisWeekAndMonthVisitsNumber" parameterType="map" resultType="int">
+        SELECT COUNT(id) FROM t_order WHERE orderDate BETWEEN #{begin} AND #{end} AND orderStatus = '已出游'
+    </select>
+
+    <!--热门套餐-->
+    <select id="findHotSetmeal" resultType="map">
+        SELECT s.name name,COUNT(s.id) setmeal_count,COUNT(s.id)/(SELECT COUNT(id) FROM t_order) proportion
+        FROM t_setmeal s,t_order o WHERE s.id = o.setmeal_id
+        GROUP BY s.name
+        ORDER BY setmeal_count DESC
+            LIMIT 0,4
+    </select>
+</mapper>
