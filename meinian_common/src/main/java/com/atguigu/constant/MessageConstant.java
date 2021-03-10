@@ -72,8 +72,4 @@ public class MessageConstant {
     public static final String ORDERSETTING_IS_NULL = "预约设置为空,不能预约";
     public static final String GET_ADDRESS_SUCCESS = "获取位置成功";
     public static final String GET_ADDRESS_FAIL = "获取位置失败";
-    int a;
-    int b;
-    int c;
-    int d;
 }
